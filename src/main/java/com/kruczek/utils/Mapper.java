@@ -5,16 +5,9 @@ import com.kruczek.services.UserPrincipal;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
-import java.util.Objects;
 
-public final class Mapper {
-    private Mapper() {
-    }
-
-    public static UserPrincipal userToUserPrincipal(final User user, final List<GrantedAuthority> authorities) {
-        Objects.requireNonNull(user, "user can't be null");
-        Objects.requireNonNull(authorities, "authorities can't be null");
-
+public class Mapper {
+    public static UserPrincipal userToUserPrincipal(User user, List<GrantedAuthority> authorities) {
         return new UserPrincipal(
                 user.getId(),
                 user.getName(),

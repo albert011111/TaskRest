@@ -5,7 +5,7 @@ import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "ROLES")
 public class Role {
 
     @Id
@@ -30,7 +30,7 @@ public class Role {
     }
 
     //todo sprawdzic czy bez settera Ok, wg @NaturalId nie powinno tworzyc sie setterow do takich pol
-    public void setRoleName(RoleName roleName) {
+/*    public void setRoleName(RoleName roleName) {
         this.roleName = roleName;
-    }
+    }*/
 }
