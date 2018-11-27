@@ -26,11 +26,13 @@ public class Task {
     @Temporal(value = TemporalType.DATE)
     private Date createDate;
 
-    @Column(name = "EXECUTE_DATE", nullable = false)
+    @Column(name = "EXECUTE_DATE")
     @LastModifiedDate
     @Temporal(value = TemporalType.DATE)
     private Date executeDate;
 
+    @Column(name = "desc")
+    private String description;
 
     public Long getId() {
         return id;
@@ -62,5 +64,13 @@ public class Task {
 
     public void setExecuteDate(Date executeDate) {
         this.executeDate = executeDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
