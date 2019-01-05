@@ -14,19 +14,19 @@ public class TestRestController {
 
     // adnotacja decyduje czy metoda moze zostac wywolana -- przed jej uruchomieniem
     @PreAuthorize(value = "hasAnyRole('USER', 'ADMIN')")
-    @GetMapping(PathConstans.API + PathConstans.TEST_ALL)
+    @GetMapping(PathConstans.TEST_ALL)
     public String checkUserAndAdminAccess() {
         return "Content for USER and ADMIN";
     }
 
-    @PreAuthorize(value = "hasAnyRole('ADMIN')")
-    @GetMapping(PathConstans.API + PathConstans.TEST_ADMIN)
+    @PreAuthorize(value = "hasRole('ADMIN')")
+    @GetMapping(PathConstans.TEST_ADMIN)
     public String checkAdminAccess() {
         return "Content for ADMIN";
     }
 
     @PreAuthorize(value = "hasRole('USER')")
-    @GetMapping(PathConstans.API + PathConstans.TEST_USER)
+    @GetMapping(PathConstans.TEST_USER)
     public String checkUserAccess() {
         return "Content for USER";
     }

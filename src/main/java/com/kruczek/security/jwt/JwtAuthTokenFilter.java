@@ -33,6 +33,8 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwtToken = retrieveJwtToken(httpServletRequest);
+            LOGGER.debug("jwtToken: " + jwtToken);
+
             if (jwtToken != null && tokenProvider.validateToken(jwtToken)) {
                 //wyciaga informacje o userze
                 String tokenUsername = tokenProvider.getUsernameFromJwtToken(jwtToken);
@@ -49,14 +51,16 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
                 //przechowuje obiekt autentykacji w SecurityContext
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
+
         } catch (Exception ex) {
-            LOGGER.error("Cant set user authentication. Msg: {}", ex);
+            LOGGER.error("Cant set user authentication. Msg: {}" + ex.getMessage(), ex);
         }
+
+        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
     private String retrieveJwtToken(HttpServletRequest httpRequest) {
-        String header = httpRequest.getHeader("AuthorizationPatryk");
+        String header = httpRequest.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
             return header.replace("Bearer ", "");
         }

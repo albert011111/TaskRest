@@ -1,5 +1,7 @@
 package com.kruczek.services;
 
+import com.kruczek.model.role.Role;
+import com.kruczek.model.role.RoleName;
 import com.kruczek.model.user.User;
 import com.kruczek.model.user.UserRepository;
 import org.slf4j.Logger;
@@ -11,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -26,6 +30,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found!" + username));
 
+        Set<Role> roles = new HashSet<>();
+        Role role = new Role();
+        role.setRoleName(RoleName.ROLE_USER);
+        role.setId(1L);
+        roles.add(role);
+        user.setRoles(roles);
         LOGGER.info("User loaded from userRepository succesfully!!!");
         return UserPrincipal.createUserPrincipal(user);
     }
