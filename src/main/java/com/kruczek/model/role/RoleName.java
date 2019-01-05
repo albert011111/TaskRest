@@ -1,6 +1,6 @@
 package com.kruczek.model.role;
 
 public enum RoleName {
-    USER,
-    ADMIN
+    ROLE_USER,
+    ROLE_ADMIN
 }

@@ -30,7 +30,7 @@ public class Role {
     }
 
     //todo sprawdzic czy bez settera Ok, wg @NaturalId nie powinno tworzyc sie setterow do takich pol
-/*    public void setRoleName(RoleName roleName) {
+    public void setRoleName(RoleName roleName) {
         this.roleName = roleName;
-    }*/
+    }
 }

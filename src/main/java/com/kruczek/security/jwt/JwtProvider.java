@@ -23,8 +23,8 @@ public class JwtProvider {
     private String jwtSecret;
 
     //TODO sprawdzić, czy tak wprowadzone dane również działają...
-//    @Value(value = "${kruczek.com.jwtExp}")
-    @Value(value = "8400")
+    @Value(value = "${kruczek.com.jwtExp}")
+//    @Value(value = "86400")
     private long jwtExpiration;
 
     /*Authentication - interfejs
@@ -40,7 +40,7 @@ public class JwtProvider {
                 .setSubject(userPrincipal.getUsername()) //sub(subject) - CLAIMS, nie trzeba ale dobrze to dodawac (Registred claims)
                 .setIssuedAt(new Date()) //okresla, kiedy token JWT zostal utworzony (timestamp - znak czasu)
                 .setExpiration(new Date(new Date().getTime() + jwtExpiration * 1000)) // nie trzeba tlumaczyc
-                .signWith(SignatureAlgorithm.ES512, jwtSecret) // "podpisuje" JWT
+                .signWith(SignatureAlgorithm.HS512, jwtSecret) // "podpisuje" JWT
                 .compact();
     }
 
@@ -61,9 +61,10 @@ public class JwtProvider {
     }
 
     public String getUsernameFromJwtToken(String token) {
+
         return Jwts.parser()
                 .setSigningKey(jwtSecret)
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
