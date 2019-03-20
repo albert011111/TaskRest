@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @CrossOrigin(value = "*", maxAge = 3600)
@@ -64,14 +65,16 @@ public class AuthRestController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterForm registerRequest) {
+        Objects.requireNonNull(registerRequest,"registerRequest can't be null");
+
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
             return new ResponseEntity<>(new ResponseMessage("Error -> This username already exists in DB"),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.NOT_ACCEPTABLE);
         }
 
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
             return new ResponseEntity<>(new ResponseMessage("Error -> This email already exists in DB"),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.NOT_ACCEPTABLE);
         }
 
         User newUser = new User(
@@ -83,17 +86,18 @@ public class AuthRestController {
         Set<String> registerRoles = registerRequest.getRole();
         Set<Role> userRoles = new HashSet<>();
 
+
         registerRoles.forEach(role -> {
-            if (role.equals("USER")) {
+            if (role.equalsIgnoreCase("USER")) {
                 Role userRole = roleRepository
                         .findByRoleName(RoleName.ROLE_USER)
-                        .orElseThrow(() -> new RuntimeException("Fail -> User Role not found."));
+                        .orElseThrow(() -> new RuntimeException("Fail -> ROLE_USER not found in DB."));
                 userRoles.add(userRole);
             }
-            if (role.equals("ADMIN")) {
+            if (role.equalsIgnoreCase("ADMIN")) {
                 Role userRole = roleRepository
                         .findByRoleName(RoleName.ROLE_ADMIN)
-                        .orElseThrow(() -> new RuntimeException("Fail -> User Role not found."));
+                        .orElseThrow(() -> new RuntimeException("Fail -> ROLE_ADMIN not found in DB."));
                 userRoles.add(userRole);
             }
         });
