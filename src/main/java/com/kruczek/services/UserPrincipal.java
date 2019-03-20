@@ -3,7 +3,6 @@ package com.kruczek.services;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kruczek.model.user.User;
 import com.kruczek.utils.Mapper;
-import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,15 +31,15 @@ public class UserPrincipal implements UserDetails {
                          String email,
                          String password,
                          List<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.name = name;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.authorities = authorities;
+        this.id = Objects.requireNonNull(id, "id can't be null");
+        this.name = Objects.requireNonNull(name, "name can't be null");
+        this.username = Objects.requireNonNull(username, "username can't be null");
+        this.email = Objects.requireNonNull(email, "email can't be null");
+        this.password = Objects.requireNonNull(password, "password can't be null");
+        this.authorities = Objects.requireNonNull(authorities, "authorities can't be null");
     }
 
-    public static UserPrincipal createUserPrincipal(User user) {
+    public static UserPrincipal createUserPrincipal(final User user) {
         Objects.requireNonNull(user, "user can't be null");
         List<GrantedAuthority> grantedAuthorities = user.getRoles()
                 .stream()
