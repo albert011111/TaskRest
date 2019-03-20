@@ -1,11 +1,9 @@
 package com.kruczek.task;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -28,12 +26,11 @@ public class Task {
     @Temporal(value = TemporalType.DATE)
     private Date createDate;
 
-    @Column(name = "EXECUTE_DATE", columnDefinition = "date default null")
+    @Column(name = "EXECUTE_DATE", nullable = false)
+    @LastModifiedDate
     @Temporal(value = TemporalType.DATE)
-    private Date executeDate = null;
+    private Date executeDate;
 
-    @Column(name = "DESCRIPTION")
-    private String description;
 
     public Long getId() {
         return id;
@@ -59,20 +56,11 @@ public class Task {
         this.createDate = createDate;
     }
 
-    @Nullable
     public Date getExecuteDate() {
         return executeDate;
     }
 
-    public void setExecuteDate(@Nullable Date executeDate) {
+    public void setExecuteDate(Date executeDate) {
         this.executeDate = executeDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }
