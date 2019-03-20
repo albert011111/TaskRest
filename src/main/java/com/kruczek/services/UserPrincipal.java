@@ -40,7 +40,8 @@ public class UserPrincipal implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserPrincipal createUserPrincipal(@NonNull User user) {
+    public static UserPrincipal createUserPrincipal(User user) {
+        Objects.requireNonNull(user, "user can't be null");
         List<GrantedAuthority> grantedAuthorities = user.getRoles()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))

@@ -85,6 +85,15 @@
             <version>1.7.25</version>
         </dependency>
 
+        <!--testing-->
+<!--
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+            <version>1.4.194</version>
+        </dependency>
+-->
 
     </dependencies>
 

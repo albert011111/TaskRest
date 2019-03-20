@@ -6,7 +6,10 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 
-public class Mapper {
+public final class Mapper {
+    private Mapper() {
+    }
+
     public static UserPrincipal userToUserPrincipal(User user, List<GrantedAuthority> authorities) {
         return new UserPrincipal(
                 user.getId(),
