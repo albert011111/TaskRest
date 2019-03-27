@@ -45,7 +45,7 @@ public class User {
     @Size(min = 6)
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
     public User() {

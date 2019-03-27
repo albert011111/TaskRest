@@ -6,28 +6,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4201", maxAge = 3600)
-//@CrossOrigin(origins = "http://localhost:4201", maxAge = 3600)
 @RestController
 @RequestMapping(TaskController.API)
+@PreAuthorize(value = "hasAnyRole('ADMIN', 'USER')")
+//@CrossOrigin(origins = "http://localhost:4201", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4201", maxAge = 3600)
 public class TaskController {
-
     static final String API = "/api";
     private static final String TASKS = "/tasks";
     private static final String TASKS_TASK_ID = TASKS + "/{taskId}";
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskController.class);
 
-
     @Autowired
     private TaskServiceImpl taskService;
 
-    @PreAuthorize(value = "hasAnyRole('ADMIN', 'USER')")
     @GetMapping(TASKS)
     public List<Task> getTasks() {
         LOGGER.warn("getTasks() invoked...");
@@ -36,9 +34,10 @@ public class TaskController {
 
     //TODO pozbyc sie TaskRepository!!! --> dodac warstwe serwisu dla pozostalych metod
 
+    @Nullable
     @GetMapping(TASKS_TASK_ID)
-    public Optional<Task> getTaskById(@PathVariable Long taskId) {
-        return taskService.getById(taskId);
+    public Task getTaskById(@PathVariable Long taskId) {
+        return taskService.getById(taskId).orElseGet(null);
     }
 
     @PutMapping(TASKS)
