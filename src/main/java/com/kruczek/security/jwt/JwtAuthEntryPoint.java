@@ -19,7 +19,8 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest,
                          HttpServletResponse httpServletResponse,
                          AuthenticationException e) throws IOException, ServletException {
-        LOGGER.error("Unauthorized error occured. Fix that!!! :)");
-        httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized ... rendered in HTML");
+
+        LOGGER.error("Access to data denied. Need to authenticate first.");
+        httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized access. LogIn and try again.");
     }
 }

@@ -7,8 +7,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.kruczek.utils.NpeChecker.getNpeDescription;
 
 @Component //typ stereotypu w Springu.
 // Adnotacja ta mówi, że obiekt tej klasy ma być zarządzany przez Springa jako BEAN
@@ -22,9 +25,7 @@ public class JwtProvider {
     // w tym przypadku te wartości zapisane będą w application.properties
     private String jwtSecret;
 
-    //TODO sprawdzić, czy tak wprowadzone dane również działają...
     @Value(value = "${kruczek.com.jwtExp}")
-//    @Value(value = "86400")
     private long jwtExpiration;
 
     /*Authentication - interfejs
@@ -32,8 +33,9 @@ public class JwtProvider {
      lub reprezentuje TOKEN dla uwierzytelnionego użytkownika po przetworzeniu requesta
       przez metodę AuthenticationManager.authenticate(Authentication)
      */
-    public String createJwtToken(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+    public String createJwtToken(final Authentication authentication) {
+        Objects.requireNonNull(authentication, getNpeDescription("authentication"));
+        final UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
         //Jwts --> fabryka dla tokenow JWT.
         return Jwts.builder()
@@ -44,7 +46,9 @@ public class JwtProvider {
                 .compact();
     }
 
-    public boolean validateToken(String tokenToValidate) {
+    public boolean validateToken(final String tokenToValidate) {
+        Objects.requireNonNull(tokenToValidate, getNpeDescription("tokenToValidate"));
+
         try {
             Jwts.parser()
                     .setSigningKey(jwtSecret)
@@ -60,7 +64,8 @@ public class JwtProvider {
         return false;
     }
 
-    public String getUsernameFromJwtToken(String token) {
+    public String getUsernameFromJwtToken(final String token) {
+        Objects.requireNonNull(token, getNpeDescription("token"));
 
         return Jwts.parser()
                 .setSigningKey(jwtSecret)
@@ -68,8 +73,6 @@ public class JwtProvider {
                 .getBody()
                 .getSubject();
     }
-
-
 }
 
 

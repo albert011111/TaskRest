@@ -90,7 +90,7 @@ public class TaskControllerTest {
     public void getTasksByIdTest() throws Exception {
         when(taskService.getById(2L)).thenReturn(Optional.ofNullable(taskById));
 
-        mockMvc.perform(get("/api/tasks/3"))
+        mockMvc.perform(get("/api/tasks/2"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().json(TASK_JASON));

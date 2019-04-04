@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(Commons.API)
 public class TestRestController {
 
-    // adnotacja decyduje czy metoda moze zostac wywolana -- przed jej uruchomieniem
     @PreAuthorize(value = "hasAnyRole('USER', 'ADMIN')")
     @GetMapping(Commons.TEST_ALL)
     public String checkUserAndAdminAccess() {
@@ -30,6 +29,4 @@ public class TestRestController {
     public String checkUserAccess() {
         return "Content for USER";
     }
-
-
 }

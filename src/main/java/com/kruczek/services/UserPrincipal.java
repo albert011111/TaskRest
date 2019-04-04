@@ -41,7 +41,8 @@ public class UserPrincipal implements UserDetails {
 
     public static UserPrincipal createUserPrincipal(final User user) {
         Objects.requireNonNull(user, "user can't be null");
-        List<GrantedAuthority> grantedAuthorities = user.getRoles()
+
+        final List<GrantedAuthority> grantedAuthorities = user.getRoles()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
                 .collect(Collectors.toList());

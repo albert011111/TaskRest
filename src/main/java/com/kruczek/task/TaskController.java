@@ -1,6 +1,7 @@
 package com.kruczek.task;
 
 
+import com.kruczek.exceptions.TaskNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.List;
 @RequestMapping(TaskController.API)
 @PreAuthorize(value = "hasAnyRole('ADMIN', 'USER')")
 //@CrossOrigin(origins = "http://localhost:4201", maxAge = 3600)
-@CrossOrigin(origins = "http://localhost:4201", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class TaskController {
     static final String API = "/api";
     private static final String TASKS = "/tasks";
@@ -51,8 +52,8 @@ public class TaskController {
         return taskService.getById(taskId)
                 .map(task -> {
                     taskService.delete(task);
-//                    return ResponseEntity.status(HttpStatus.OK).build();
                     return ResponseEntity.ok(task);
-                }).orElseThrow(() -> new ResourceNotFoundException("Task with id: " + taskId + " not found!"));
+                })
+                .orElseThrow(() -> new TaskNotFoundException(taskId));
     }
 }

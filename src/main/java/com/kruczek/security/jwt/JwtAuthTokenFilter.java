@@ -17,14 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
 
     @Autowired
-    JwtProvider tokenProvider;
+    private JwtProvider tokenProvider;
 
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
 
     @Override
