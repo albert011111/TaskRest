@@ -1,19 +1,23 @@
 package com.kruczek.task;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import static com.kruczek.utils.NpeChecker.getNpeDescription;
 
 @Service
 public class TaskServiceImpl {
 
+    private final TaskRepository taskRepository;
+
     @Autowired
-    private TaskRepository taskRepository;
+    public TaskServiceImpl(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     public Optional<Task> save(final Task task) {
         Objects.requireNonNull(task, getNpeDescription("task"));

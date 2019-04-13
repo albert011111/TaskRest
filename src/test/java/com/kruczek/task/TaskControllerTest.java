@@ -1,5 +1,13 @@
 package com.kruczek.task;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,22 +20,23 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import static com.kruczek.utils.Commons.ADMIN;
 import static com.kruczek.utils.Commons.USER;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TaskControllerTest {
-    private static final String TASK_JASON = "{'id':2," +
+    private static final String TASK_JSON = "{'id':2," +
             "'name':'Odkurzanie'," +
             "'createDate':'2017-01-16T23:00:00.000+0000'," +
             "'executeDate':null," +
@@ -65,7 +74,7 @@ public class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(content().json("[" + TASK_JASON + "]"));
+                .andExpect(content().json("[" + TASK_JSON + "]"));
 
         verify(taskService, times(1)).getAll();
         verifyNoMoreInteractions(taskService);
@@ -93,7 +102,7 @@ public class TaskControllerTest {
         mockMvc.perform(get("/api/tasks/2"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(content().json(TASK_JASON));
+                .andExpect(content().json(TASK_JSON));
 
         verify(taskService, times(1)).getById(2L);
         verifyNoMoreInteractions(taskService);

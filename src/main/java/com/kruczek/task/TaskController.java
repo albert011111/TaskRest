@@ -1,7 +1,8 @@
 package com.kruczek.task;
 
 
-import com.kruczek.exceptions.TaskNotFoundException;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,21 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.kruczek.exceptions.TaskNotFoundException;
+
+import static com.kruczek.task.TaskController.API;
 
 @RestController
-@RequestMapping(TaskController.API)
+@RequestMapping(API)
 @PreAuthorize(value = "hasAnyRole('ADMIN', 'USER')")
 //@CrossOrigin(origins = "http://localhost:4201", maxAge = 3600)
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -24,8 +34,12 @@ public class TaskController {
     private static final String TASKS_TASK_ID = TASKS + "/{taskId}";
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskController.class);
 
+    private final TaskServiceImpl taskService;
+
     @Autowired
-    private TaskServiceImpl taskService;
+    public TaskController(TaskServiceImpl taskService) {
+        this.taskService = taskService;
+    }
 
     @GetMapping(TASKS)
     public List<Task> getTasks() {

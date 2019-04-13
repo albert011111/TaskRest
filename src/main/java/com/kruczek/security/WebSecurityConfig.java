@@ -1,8 +1,5 @@
 package com.kruczek.security;
 
-import com.kruczek.security.jwt.JwtAuthEntryPoint;
-import com.kruczek.security.jwt.JwtAuthTokenFilter;
-import com.kruczek.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,58 +15,63 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.kruczek.security.jwt.JwtAuthEntryPoint;
+import com.kruczek.security.jwt.JwtAuthTokenFilter;
+import com.kruczek.services.UserDetailsServiceImpl;
+
 @Configuration // oznacza klasę jako definicję beana dla contextu aplikacji
 @EnableWebSecurity
 //wlacza security z poziomu wykonania metody --> w sensie, ze sprawdza czy dany uzytkownik moze wykonac metode
 @EnableGlobalMethodSecurity(prePostEnabled = true/*pozwala na adnotacje @PreAuthorize nad metodami*/)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    UserDetailsServiceImpl userService;
+	@Autowired
+	UserDetailsServiceImpl userService;
 
-    @Autowired
-    JwtAuthEntryPoint unauthorizedHandler;
+	@Autowired
+	JwtAuthEntryPoint unauthorizedHandler;
 
-    @Bean
-    public JwtAuthTokenFilter jwtAuthTokenFilter() {
-        return new JwtAuthTokenFilter();
-    }
+	@Bean
+	public JwtAuthTokenFilter jwtAuthTokenFilter() {
+		return new JwtAuthTokenFilter();
+	}
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return super.userDetailsService();
-    }
+	@Bean
+	public UserDetailsService userDetailsService() {
+		return super.userDetailsService();
+	}
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder authenticationBuilder) throws Exception {
-        authenticationBuilder
-                .userDetailsService(userService)
-                .passwordEncoder(passwordEncoder());
-    }
+	@Override
+	protected void configure(AuthenticationManagerBuilder authenticationBuilder) throws Exception {
+		authenticationBuilder
+				.userDetailsService(userService)
+				.passwordEncoder(passwordEncoder());
+	}
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/tasks").access("hasRole('ROLE_USER')")
-                .anyRequest().authenticated()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.cors().and().csrf().disable()
+				.authorizeRequests()
+				.antMatchers("/api/auth/**").permitAll()
+				.antMatchers("/api/tasks").access("hasRole('ROLE_USER')")
+				.antMatchers("/api/months/**").permitAll()
+				.anyRequest().authenticated()
+				.and()
+				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+				.and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.addFilterBefore(jwtAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
+		http.addFilterBefore(jwtAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+	}
 }
