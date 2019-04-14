@@ -82,6 +82,16 @@ public final class CalendarUtils {
 
 	public static void populateMonth(@Nullable Integer year, com.kruczek.calendar.month.Month month) {
 		Objects.requireNonNull(month, getNpeDescription("month"));
+		final List<Day> days = generateDaysForMonth(year, month);
+
+		month.setDays(days);
+	}
+
+	public static List<Day> generateDaysForMonth(com.kruczek.calendar.month.Month month) {
+		return generateDaysForMonth(null, month);
+	}
+
+	public static List<Day> generateDaysForMonth(@Nullable Integer year, com.kruczek.calendar.month.Month month) {
 		final List<Day> days = new ArrayList<>();
 
 		for (int dayIdx = 1; dayIdx <= month.getName().length(false); dayIdx++) {
@@ -89,8 +99,7 @@ public final class CalendarUtils {
 					? Calendar.getInstance().get(Calendar.YEAR) : year, month.getName(), dayIdx);
 			days.add(retrieveNewDay(month, localDate).get());
 		}
-
-		month.setDays(days);
+		return days;
 	}
 
 	public static Supplier<Day> retrieveNewDay(com.kruczek.calendar.month.Month month, LocalDate date) {

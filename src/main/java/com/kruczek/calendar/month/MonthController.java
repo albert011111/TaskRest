@@ -34,11 +34,11 @@ public class MonthController implements CalendarLogger {
 		try {
 			List<Month> months = CalendarUtils.generateMonths();
 			months.forEach(monthService::addMonth);
-			LOGGER.info("Months generating process succesfully finished");
+			LOGGER.info("Months generating process successfully finished");
 
 			return months;
 		} catch (Exception e) {
-			LOGGER.error("Adding months list to DB failed.", e);
+			LOGGER.error("Months generating process failed.", e);
 		}
 		return new ArrayList<>();
 	}

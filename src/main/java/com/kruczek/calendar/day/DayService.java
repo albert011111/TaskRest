@@ -2,6 +2,7 @@ package com.kruczek.calendar.day;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,10 @@ public class DayService {
 		Objects.requireNonNull(month, NpeChecker.getNpeDescription("month"));
 
 		return dayRepository.getDaysByMonth(month);
+	}
+
+	public Optional<Day> getDay(Long dayId) {
+		return dayRepository.findById(dayId);
 	}
 
 }

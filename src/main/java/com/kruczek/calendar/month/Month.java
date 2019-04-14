@@ -1,10 +1,17 @@
 package com.kruczek.calendar.month;
 
-import com.kruczek.calendar.day.Day;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.kruczek.calendar.day.Day;
 
 @Entity
 public class Month {
@@ -15,8 +22,9 @@ public class Month {
     @Enumerated(EnumType.STRING)
     private java.time.Month name;
 
-    @OneToMany(mappedBy = "month")
-    private List<Day> days = new ArrayList<>();
+	@OneToMany(mappedBy = "month", cascade = CascadeType.ALL)
+	@JsonBackReference
+	private List<Day> days = new ArrayList<>();
 
     public long getId() {
         return id;

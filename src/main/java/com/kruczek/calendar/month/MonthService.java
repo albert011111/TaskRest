@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import com.kruczek.calendar.CalendarUtils;
+
 import static com.kruczek.utils.NpeChecker.getNpeDescription;
 
 @Service
@@ -20,6 +22,8 @@ public class MonthService {
 
 	public void addMonth(final Month month) {
 		Objects.requireNonNull(month, getNpeDescription("month"));
+		month.setDays(CalendarUtils.generateDaysForMonth(month));
+
 		monthRepository.save(month);
 	}
 

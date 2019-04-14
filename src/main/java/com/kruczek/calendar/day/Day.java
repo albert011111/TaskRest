@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,9 +19,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.kruczek.calendar.CalendarUtils;
 import com.kruczek.calendar.month.Month;
 import com.kruczek.task.Task;
+import com.kruczek.utils.NpeChecker;
 
 import static com.kruczek.utils.NpeChecker.getNpeDescription;
 
@@ -40,9 +43,10 @@ public class Day implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "month_id")
+	@JsonManagedReference
 	private Month month;
 
-	@OneToMany
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
 	private List<Task> tasks = new ArrayList<>();
 
 	@Column(columnDefinition = "boolean default false")
@@ -102,5 +106,10 @@ public class Day implements Serializable {
 
 	public void setDayOfWeek(DayOfWeek dayOfWeek) {
 		this.dayOfWeek = dayOfWeek;
+	}
+
+	public void addNewTask(final Task task) {
+		Objects.requireNonNull(task, NpeChecker.getNpeDescription("task"));
+		tasks.add(task);
 	}
 }

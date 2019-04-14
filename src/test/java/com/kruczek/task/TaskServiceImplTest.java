@@ -1,5 +1,9 @@
 package com.kruczek.task;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,15 +13,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {TaskServiceImpl.class})
-public class TaskServiceImplUnitTest {
+public class TaskServiceImplTest {
 
     @Autowired
     private TaskServiceImpl taskService;
