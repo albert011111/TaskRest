@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import static com.kruczek.utils.Commons.MONTH_NAME;
 
 @RestController
 @RequestMapping(API)
+@CrossOrigin(value = "*", maxAge = 3600)
 public class DayController implements CalendarLogger {
 	private final MonthService monthService;
 	private final DayService dayService;
@@ -34,8 +36,10 @@ public class DayController implements CalendarLogger {
 		this.dayService = dayService;
 	}
 
+	//TODO replace with getDaysByMonthId(monthId)
 	@Nullable
 	@GetMapping(DAYS + MONTH_NAME)
+	@Deprecated
 	public List<Day> getDaysByMonth(@PathVariable String monthName) {
 		LOGGER.info("Fetching days process started");
 		try {

@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +20,7 @@ import static com.kruczek.utils.Commons.MONTH_NAME;
 
 @RestController
 @RequestMapping(API)
+@CrossOrigin(value = "*", maxAge = 3600)
 public class MonthController implements CalendarLogger {
 	private final MonthService monthService;
 
@@ -28,7 +29,7 @@ public class MonthController implements CalendarLogger {
 		this.monthService = monthService;
 	}
 
-	@PutMapping(MONTHS)
+	//	@PutMapping(MONTHS)
 	public List<Month> addMonthsByYear() {
 		LOGGER.info("Months generating process started");
 		try {
@@ -44,7 +45,7 @@ public class MonthController implements CalendarLogger {
 	}
 
 	@GetMapping(MONTHS + MONTH_NAME)
-	public Optional<Month> getMonthByName(@PathVariable String name) {
-		return Optional.of(monthService.getMonthByName(name.toUpperCase()));
+	public Optional<Month> getMonthByName(@PathVariable String monthName) {
+		return Optional.of(monthService.getMonthByName(monthName.toUpperCase()));
 	}
 }
