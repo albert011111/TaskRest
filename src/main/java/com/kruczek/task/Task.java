@@ -6,14 +6,20 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.lang.Nullable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kruczek.model.user.User;
 
 
 @Entity(name = "tasks")
@@ -22,10 +28,10 @@ import org.springframework.lang.Nullable;
 public class Task {
 	@Id
 	@GeneratedValue
-	@Column(name = "ID")
+	@Column
 	private Long id;
 
-	@Column(name = "NAME", nullable = false)
+	@Column(nullable = false)
 	@NotNull
 	@Length(min = 3, message = "Task name must have at least 3 signs")
 	private String name;
@@ -35,12 +41,23 @@ public class Task {
 	@Temporal(value = TemporalType.DATE)
 	private Date createDate;
 
+	@Column(nullable = false, columnDefinition = "boolean default true")
+	private boolean finished;
+
 	@Column(name = "EXECUTE_DATE", columnDefinition = "date default null")
 	@Temporal(value = TemporalType.DATE)
 	private Date executeDate = null;
 
-	@Column(name = "DESCRIPTION")
+	@Column
 	private String description;
+
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	@JsonIgnore
+	private User user;
+
+	@Transient
+	private String userName;
 
 	public Long getId() {
 		return id;
@@ -66,6 +83,14 @@ public class Task {
 		this.createDate = createDate;
 	}
 
+	public boolean isFinished() {
+		return finished;
+	}
+
+	public void setFinished(boolean finished) {
+		this.finished = finished;
+	}
+
 	@Nullable
 	public Date getExecuteDate() {
 		return executeDate;
@@ -81,5 +106,17 @@ public class Task {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getUserName() {
+		return userName;
 	}
 }

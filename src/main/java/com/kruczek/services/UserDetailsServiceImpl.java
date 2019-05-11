@@ -13,30 +13,31 @@ import org.springframework.stereotype.Service;
 
 import com.kruczek.model.user.User;
 import com.kruczek.model.user.UserRepository;
-import com.kruczek.utils.NpeChecker;
+
+import static com.kruczek.utils.NpeChecker.getNpeDescription;
 
 @Service
+@Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    @Autowired
-    public UserDetailsServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+	@Autowired
+	public UserDetailsServiceImpl(UserRepository userRepository) {
+		this.userRepository = Objects.requireNonNull(userRepository, getNpeDescription("userRepository"));
+	}
 
-    @Transactional
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Objects.requireNonNull(username, NpeChecker.getNpeDescription("username"));
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		LOGGER.info("loadUserByUsername started with username [{}]", username);
 
-        User user = userRepository
-                .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found!" + username));
+		Objects.requireNonNull(username, getNpeDescription("username"));
+		User user = userRepository
+				.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found!" + username));
 
-        LOGGER.info("User loaded...");
-        user.getRoles().forEach(role -> LOGGER.warn("ROLE: " + role.getRoleName()));
-        return UserPrincipal.createUserPrincipal(user);
-    }
+		LOGGER.info("User {} loaded succesfully", user);
+		return UserPrincipal.createUserPrincipal(user);
+	}
 }

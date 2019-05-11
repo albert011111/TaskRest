@@ -1,5 +1,7 @@
 package com.kruczek.security;
 
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,23 +19,36 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.kruczek.security.jwt.JwtAuthEntryPoint;
 import com.kruczek.security.jwt.JwtAuthTokenFilter;
+import com.kruczek.security.jwt.JwtProvider;
 import com.kruczek.services.UserDetailsServiceImpl;
+
+import static com.kruczek.utils.NpeChecker.getNpeDescription;
 
 @Configuration // oznacza klasę jako definicję beana dla contextu aplikacji
 @EnableWebSecurity
 //wlacza security z poziomu wykonania metody --> w sensie, ze sprawdza czy dany uzytkownik moze wykonac metode
 @EnableGlobalMethodSecurity(prePostEnabled = true/*pozwala na adnotacje @PreAuthorize nad metodami*/)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	private final UserDetailsServiceImpl userService;
+	private final JwtAuthEntryPoint unauthorizedHandler;
+	private final JwtProvider tokenProvider;
+	private final UserDetailsServiceImpl userDetailsService;
 
 	@Autowired
-	UserDetailsServiceImpl userService;
-
-	@Autowired
-	JwtAuthEntryPoint unauthorizedHandler;
+	public WebSecurityConfig(
+			UserDetailsServiceImpl userService,
+			JwtAuthEntryPoint unauthorizedHandler,
+			JwtProvider tokenProvider,
+			UserDetailsServiceImpl userDetailsService) {
+		this.userService = Objects.requireNonNull(userService, getNpeDescription("userService"));
+		this.unauthorizedHandler = Objects.requireNonNull(unauthorizedHandler, getNpeDescription("unauthorizedHandler"));
+		this.tokenProvider = Objects.requireNonNull(tokenProvider, "tokenProvider");
+		this.userDetailsService = Objects.requireNonNull(userDetailsService, "userDetailsService");
+	}
 
 	@Bean
 	public JwtAuthTokenFilter jwtAuthTokenFilter() {
-		return new JwtAuthTokenFilter();
+		return new JwtAuthTokenFilter(tokenProvider, userDetailsService);
 	}
 
 	@Bean
