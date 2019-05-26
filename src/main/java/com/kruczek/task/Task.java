@@ -14,16 +14,20 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.lang.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.kruczek.calendar.day.Day;
 import com.kruczek.model.user.User;
 
 
 @Entity(name = "tasks")
 @EntityListeners(AuditingEntityListener.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 //@JsonIgnoreProperties(value = {"createDate", "executeDate"}, allowGetters = true)
 public class Task {
 	@Id
@@ -37,7 +41,6 @@ public class Task {
 	private String name;
 
 	@Column(name = "CREATE_DATE", nullable = false, updatable = false)
-	@CreatedDate
 	@Temporal(value = TemporalType.DATE)
 	private Date createDate;
 
@@ -55,6 +58,12 @@ public class Task {
 	@JoinColumn(name = "user_id")
 	@JsonIgnore
 	private User user;
+
+	@ManyToOne
+	@JoinColumn(name = "day_id")
+//	@JsonManagedReference
+	@JsonIgnore
+	private Day day;
 
 	@Transient
 	private String userName;
@@ -114,6 +123,14 @@ public class Task {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Day getDay() {
+		return day;
+	}
+
+	public void setDay(Day day) {
+		this.day = day;
 	}
 
 	public String getUserName() {

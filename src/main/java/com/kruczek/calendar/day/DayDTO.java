@@ -1,11 +1,11 @@
 package com.kruczek.calendar.day;
 
-import com.kruczek.calendar.month.MonthDTO;
-import com.kruczek.task.TaskDTO;
-
 import java.time.DayOfWeek;
 import java.util.Date;
 import java.util.List;
+
+import com.kruczek.calendar.month.MonthDTO;
+import com.kruczek.task.dto.TaskDTO;
 
 
 public class DayDTO {

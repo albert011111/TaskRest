@@ -19,6 +19,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.NaturalId;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.kruczek.model.role.Role;
 import com.kruczek.task.Task;
 
@@ -61,6 +62,7 @@ public final class User {
 	private Set<Role> roles = new HashSet<>();
 
 	@OneToMany(mappedBy = "user")
+	@JsonBackReference
 	private List<Task> tasks = new ArrayList<>();
 
 	public User() {

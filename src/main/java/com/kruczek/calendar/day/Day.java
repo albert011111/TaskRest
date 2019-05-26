@@ -19,7 +19,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.kruczek.calendar.CalendarUtils;
 import com.kruczek.calendar.month.Month;
 import com.kruczek.task.Task;
@@ -28,6 +31,8 @@ import com.kruczek.utils.NpeChecker;
 import static com.kruczek.utils.NpeChecker.getNpeDescription;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class Day implements Serializable {
 	private static final long serialVersionUID = -3989654440890545362L;
 
@@ -43,10 +48,11 @@ public class Day implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "month_id")
-	@JsonManagedReference
+	@JsonBackReference
 	private Month month;
 
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+	@OneToMany(mappedBy = "day", cascade = {CascadeType.ALL})
+	@JsonManagedReference
 	private List<Task> tasks = new ArrayList<>();
 
 	@Column(columnDefinition = "boolean default false")
