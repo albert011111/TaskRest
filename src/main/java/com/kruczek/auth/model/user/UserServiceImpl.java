@@ -1,4 +1,4 @@
-package com.kruczek.model.user;
+package com.kruczek.auth.model.user;
 
 import java.util.Objects;
 import javax.transaction.Transactional;

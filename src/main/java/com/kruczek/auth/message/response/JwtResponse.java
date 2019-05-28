@@ -1,8 +1,8 @@
-package com.kruczek.message.response;
-
-import org.springframework.security.core.GrantedAuthority;
+package com.kruczek.auth.message.response;
 
 import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
 
 public class JwtResponse  {
     private String token;

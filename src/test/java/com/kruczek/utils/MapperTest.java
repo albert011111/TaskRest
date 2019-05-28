@@ -1,18 +1,19 @@
 package com.kruczek.utils;
 
-import com.kruczek.model.role.Role;
-import com.kruczek.model.role.RoleName;
-import com.kruczek.model.user.User;
-import com.kruczek.services.UserPrincipal;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import com.kruczek.auth.model.role.Role;
+import com.kruczek.auth.model.role.RoleName;
+import com.kruczek.auth.model.user.User;
+import com.kruczek.auth.services.UserPrincipal;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;

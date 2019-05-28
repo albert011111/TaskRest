@@ -1,4 +1,4 @@
-package com.kruczek.model.role;
+package com.kruczek.auth.model.role;
 
 public enum RoleName {
     ROLE_USER,

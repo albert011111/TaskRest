@@ -1,4 +1,4 @@
-package com.kruczek.message.request;
+package com.kruczek.auth.message.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

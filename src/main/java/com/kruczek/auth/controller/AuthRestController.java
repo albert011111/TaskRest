@@ -1,15 +1,10 @@
-package com.kruczek.controller;
+package com.kruczek.auth.controller;
 
-import com.kruczek.message.request.LoginForm;
-import com.kruczek.message.request.RegisterForm;
-import com.kruczek.message.response.JwtResponse;
-import com.kruczek.message.response.ResponseMessage;
-import com.kruczek.model.role.Role;
-import com.kruczek.model.role.RoleName;
-import com.kruczek.model.role.RoleRepository;
-import com.kruczek.model.user.User;
-import com.kruczek.model.user.UserRepository;
-import com.kruczek.security.jwt.JwtProvider;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +16,22 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import com.kruczek.auth.message.request.LoginForm;
+import com.kruczek.auth.message.request.RegisterForm;
+import com.kruczek.auth.message.response.JwtResponse;
+import com.kruczek.auth.message.response.ResponseMessage;
+import com.kruczek.auth.model.role.Role;
+import com.kruczek.auth.model.role.RoleName;
+import com.kruczek.auth.model.role.RoleRepository;
+import com.kruczek.auth.model.user.User;
+import com.kruczek.auth.model.user.UserRepository;
+import com.kruczek.security.jwt.JwtProvider;
 
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController

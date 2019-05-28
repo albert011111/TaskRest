@@ -32,4 +32,12 @@ public class MonthService {
 		Objects.requireNonNull(monthName, getNpeDescription("month"));
 		return monthRepository.findByName(java.time.Month.valueOf(monthName));
 	}
+
+/*	public Month getMonthByNameAndUsername(final String monthName, final String username){
+		getMonthByName(monthName).getDays()
+				.stream()
+				.flatMap(day -> day.getTasks().stream())
+				.filter(task -> task.getUser().getUsername().equals(username))
+		.collect(Collectors.groupingBy());
+	}*/
 }

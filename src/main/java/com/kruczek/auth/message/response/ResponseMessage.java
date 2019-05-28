@@ -1,4 +1,4 @@
-package com.kruczek.message.response;
+package com.kruczek.auth.message.response;
 
 public class ResponseMessage {
     private String message;

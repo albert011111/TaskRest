@@ -8,6 +8,7 @@ public final class Commons {
 
 	public static final String MONTHS = "/months";
 	public static final String MONTH_NAME = "/{monthName}";
+	public static final String USER_NAME = "/{userName}";
 
 	public static final String TEST_USER = "/test/user";
 	public static final String TEST_ADMIN = "/test/admin";

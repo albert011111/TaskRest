@@ -17,10 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.kruczek.auth.services.UserDetailsServiceImpl;
 import com.kruczek.security.jwt.JwtAuthEntryPoint;
 import com.kruczek.security.jwt.JwtAuthTokenFilter;
 import com.kruczek.security.jwt.JwtProvider;
-import com.kruczek.services.UserDetailsServiceImpl;
 
 import static com.kruczek.utils.NpeChecker.getNpeDescription;
 

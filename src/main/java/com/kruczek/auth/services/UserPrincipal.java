@@ -1,16 +1,17 @@
-package com.kruczek.services;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.kruczek.model.user.User;
-import com.kruczek.utils.Mapper;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+package com.kruczek.auth.services;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kruczek.auth.model.user.User;
+import com.kruczek.utils.Mapper;
 
 public class UserPrincipal implements UserDetails {
     private long id;

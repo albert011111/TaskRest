@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.kruczek.services.UserDetailsServiceImpl;
+import com.kruczek.auth.services.UserDetailsServiceImpl;
 
 import static com.kruczek.utils.NpeChecker.getNpeDescription;
 

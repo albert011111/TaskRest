@@ -20,8 +20,8 @@ import org.springframework.lang.Nullable;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.kruczek.auth.model.user.User;
 import com.kruczek.calendar.day.Day;
-import com.kruczek.model.user.User;
 
 
 @Entity(name = "tasks")

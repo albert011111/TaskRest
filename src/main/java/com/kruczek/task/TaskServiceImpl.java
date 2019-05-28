@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kruczek.model.user.User;
+import com.kruczek.auth.model.user.User;
 
 import static com.kruczek.utils.NpeChecker.getNpeDescription;
 

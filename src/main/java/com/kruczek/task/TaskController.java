@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -20,11 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.kruczek.auth.model.user.User;
+import com.kruczek.auth.model.user.UserServiceImpl;
+import com.kruczek.calendar.day.Day;
 import com.kruczek.calendar.day.DayService;
 import com.kruczek.exceptions.TaskNotFoundException;
-import com.kruczek.model.user.UserServiceImpl;
-import com.kruczek.services.UserDetailsServiceImpl;
 import com.kruczek.task.dto.TaskDTO;
+import com.kruczek.utils.Mapper;
 
 import static com.kruczek.task.TaskController.API;
 
@@ -46,7 +49,6 @@ public class TaskController {
 
 	@Autowired
 	public TaskController(TaskServiceImpl taskService,
-			UserDetailsServiceImpl userService,
 			UserServiceImpl userService1,
 			DayService dayService) {
 		this.taskService = taskService;
@@ -79,24 +81,19 @@ public class TaskController {
 		}
 	}
 
+	//TODO dolaczyc mappera
 	@PutMapping(TASKS)
 	public Task addTask(@RequestBody TaskDTO taskDTO) {
-/*		taskDTO.setUser(userService.getUserByUsername(taskDTO.getUserName()));
+		try {
+			LOGGER.info("Request with taskDto: " + taskDTO);
+			final User userByUsername = userService.getUserByUsername(taskDTO.getUserName());
+			final Day day = dayService.getDay(taskDTO.getDayId()).orElse(null);
 
-		return taskService.save(taskDTO)
-				.orElseThrow(() -> new ResourceNotFoundException("Task save process failed!"));*/
-
-		//TODO koniecznie wykonac konwerter a najlepiej dolaczyc mappera
-		final Task taskEntity = new Task();
-
-		taskEntity.setUser(userService.getUserByUsername(taskDTO.getUserName()));
-		taskEntity.setCreateDate(taskDTO.getCreateDate());
-		taskEntity.setExecuteDate(taskDTO.getExecuteDate());
-		taskEntity.setName(taskDTO.getName());
-		taskEntity.setDescription(taskDTO.getDescription());
-		taskEntity.setDay(dayService.getDay(taskDTO.getDayId()).orElse(null));
-		LOGGER.info("Request with taskDto: " + taskDTO);
-		return null;
+			return taskService.save(Mapper.convertToTask(userByUsername, day).apply(taskDTO))
+					.orElseThrow(() -> new ResourceNotFoundException("Task save process failed"));
+		} catch (ResourceNotFoundException ex) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task save process failed", ex);
+		}
 	}
 
 	@DeleteMapping(TASKS_TASK_ID)

@@ -1,4 +1,4 @@
-package com.kruczek.model.user;
+package com.kruczek.auth.model.user;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.NaturalId;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.kruczek.model.role.Role;
+import com.kruczek.auth.model.role.Role;
 import com.kruczek.task.Task;
 
 @Entity

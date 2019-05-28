@@ -1,4 +1,4 @@
-package com.kruczek.services;
+package com.kruczek.auth.services;
 
 import java.util.Objects;
 import javax.transaction.Transactional;
@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.kruczek.model.user.User;
-import com.kruczek.model.user.UserRepository;
+import com.kruczek.auth.model.user.User;
+import com.kruczek.auth.model.user.UserRepository;
 
 import static com.kruczek.utils.NpeChecker.getNpeDescription;
 

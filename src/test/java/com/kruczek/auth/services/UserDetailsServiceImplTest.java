@@ -1,4 +1,4 @@
-package com.kruczek.services;
+package com.kruczek.auth.services;
 
 public class UserDetailsServiceImplTest {
 }
