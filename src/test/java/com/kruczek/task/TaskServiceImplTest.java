@@ -27,26 +27,26 @@ public class TaskServiceImplTest {
 
     @Before
     public void setupData() {
-        Task t = new Task();
-        t.setId(1L);
-        t.setName("Bieganie");
-        t.setDescription("Opis zadania 1");
+        Task task = new Task();
+        task.setId(1L);
+        task.setName("Bieganie");
+        task.setDescription("Opis zadania 1");
 
-        Task t2 = new Task();
-        t2.setId(2L);
-        t2.setName("Sprzatanie");
-        t2.setDescription("Opis zadania 2");
+        Task task2 = new Task();
+        task2.setId(2L);
+        task2.setName("Sprzatanie");
+        task2.setDescription("Opis zadania 2");
 
-        List<Task> tasks = Arrays.asList(t, t2);
+        List<Task> tasks = Arrays.asList(task, task2);
 
         when(taskRepository.findAll())
                 .thenReturn(tasks);
 
         when(taskRepository.findById(1L))
-                .thenReturn(Optional.ofNullable(t));
+                .thenReturn(Optional.of(task));
 
         //delete test
-//        Mockito.doReturn(Collections.singletonList(t2)).when(taskRepository).delete(t);
+//        Mockito.doReturn(Collections.singletonList(task2)).when(taskRepository).delete(task);
 
     }
 

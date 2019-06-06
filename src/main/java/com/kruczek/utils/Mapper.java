@@ -41,6 +41,7 @@ public final class Mapper {
 			entity.setId(taskDTO.getId());
 			entity.setDay(day);
 			entity.setUser(user);
+			entity.setUserName(taskDTO.getUserName());
 			entity.setCreateDate(taskDTO.getCreateDate());
 			entity.setExecuteDate(taskDTO.getExecuteDate());
 			entity.setDescription(taskDTO.getDescription());

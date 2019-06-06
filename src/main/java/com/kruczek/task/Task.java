@@ -56,7 +56,7 @@ public class Task {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	@JsonIgnore
+//	@JsonIgnore
 	private User user;
 
 	@ManyToOne
@@ -135,5 +135,9 @@ public class Task {
 
 	public String getUserName() {
 		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 }
