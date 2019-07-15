@@ -37,6 +37,7 @@ public final class Mapper {
 			if (taskDTO == null) {
 				return null;
 			}
+
 			Task entity = new Task();
 			entity.setId(taskDTO.getId());
 			entity.setDay(day);
@@ -47,6 +48,7 @@ public final class Mapper {
 			entity.setDescription(taskDTO.getDescription());
 			entity.setName(taskDTO.getName());
 			entity.setFinished(taskDTO.isFinished());
+
 			return entity;
 		};
 	}

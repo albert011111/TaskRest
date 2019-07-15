@@ -56,13 +56,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.userDetailsService();
 	}
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder authenticationBuilder) throws Exception {
-		authenticationBuilder
-				.userDetailsService(userService)
-				.passwordEncoder(passwordEncoder());
-	}
-
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -75,12 +68,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
+	protected void configure(AuthenticationManagerBuilder authenticationBuilder) throws Exception {
+		authenticationBuilder
+				.userDetailsService(userService)
+				.passwordEncoder(passwordEncoder());
+	}
+
+	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
 				.authorizeRequests()
 				.antMatchers("/api/auth/**", "/h2-console").permitAll()
 				.antMatchers("/api/tasks").access("hasRole('ROLE_USER')")
-				.antMatchers("/api/months/**", "/api/days/**").permitAll()
+				.antMatchers("/api/months/**", "/api/days/**", "/api/wallet/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
