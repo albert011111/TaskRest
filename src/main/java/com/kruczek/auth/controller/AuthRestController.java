@@ -5,9 +5,6 @@ import java.util.Objects;
 import java.util.Set;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,81 +34,77 @@ import com.kruczek.security.jwt.JwtProvider;
 @RestController
 @RequestMapping("api/auth")
 public class AuthRestController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthRestController.class);
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+	private final AuthenticationManager authenticationManager;
+	private final JwtProvider jwtProvider;
+	private final UserRepository userRepository;
+	private final PasswordEncoder encoder;
+	private final RoleRepository roleRepository;
 
-    @Autowired
-    private JwtProvider jwtProvider;
+	public AuthRestController(AuthenticationManager authenticationManager, JwtProvider jwtProvider, UserRepository userRepository, PasswordEncoder encoder, RoleRepository roleRepository) {
+		this.authenticationManager = authenticationManager;
+		this.jwtProvider = jwtProvider;
+		this.userRepository = userRepository;
+		this.encoder = encoder;
+		this.roleRepository = roleRepository;
+	}
 
-    @Autowired
-    private UserRepository userRepository;
+	@PostMapping("/login")
+	public ResponseEntity<?> loginUser(@Valid @RequestBody LoginForm loginRequest) {
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String jwtToken = jwtProvider.createJwtToken(authentication);
 
-    @Autowired
-    private PasswordEncoder encoder;
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-    @Autowired
-    private RoleRepository roleRepository;
+		return ResponseEntity.ok(new JwtResponse(jwtToken, userDetails.getUsername(), userDetails.getAuthorities()));
+	}
 
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginForm loginRequest) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        LOGGER.info("authentication: " + authentication.getName());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+	@PostMapping("/register")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterForm registerRequest) {
+		Objects.requireNonNull(registerRequest, "registerRequest can't be null");
 
-        String jwtToken = jwtProvider.createJwtToken(authentication);
-        LOGGER.info("jwtToken: " + jwtToken);
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		if (userRepository.existsByUsername(registerRequest.getUsername())) {
+			return new ResponseEntity<>(new ResponseMessage("Error -> This username already exists in DB"),
+					HttpStatus.NOT_ACCEPTABLE);
+		}
 
-        return ResponseEntity.ok(new JwtResponse(jwtToken, userDetails.getUsername(), userDetails.getAuthorities()));
-    }
+		if (userRepository.existsByEmail(registerRequest.getEmail())) {
+			return new ResponseEntity<>(new ResponseMessage("Error -> This email already exists in DB"),
+					HttpStatus.NOT_ACCEPTABLE);
+		}
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterForm registerRequest) {
-        Objects.requireNonNull(registerRequest,"registerRequest can't be null");
-
-        if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            return new ResponseEntity<>(new ResponseMessage("Error -> This username already exists in DB"),
-                    HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            return new ResponseEntity<>(new ResponseMessage("Error -> This email already exists in DB"),
-                    HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        User newUser = new User(
-                registerRequest.getName(),
-                registerRequest.getUsername(),
-                registerRequest.getEmail(),
-                encoder.encode(registerRequest.getPassword())
-        );
-        Set<String> registerRoles = registerRequest.getRole();
-        Set<Role> userRoles = new HashSet<>();
+		User newUser = new User(
+				registerRequest.getName(),
+				registerRequest.getUsername(),
+				registerRequest.getEmail(),
+				encoder.encode(registerRequest.getPassword())
+		);
+		Set<String> registerRoles = registerRequest.getRole();
+		Set<Role> userRoles = new HashSet<>();
 
 
-        registerRoles.forEach(role -> {
-            if (role.equalsIgnoreCase("USER")) {
-                Role userRole = roleRepository
-                        .findByRoleName(RoleName.ROLE_USER)
-                        .orElseThrow(() -> new RuntimeException("Fail -> ROLE_USER not found in DB."));
-                userRoles.add(userRole);
-            }
-            if (role.equalsIgnoreCase("ADMIN")) {
-                Role userRole = roleRepository
-                        .findByRoleName(RoleName.ROLE_ADMIN)
-                        .orElseThrow(() -> new RuntimeException("Fail -> ROLE_ADMIN not found in DB."));
-                userRoles.add(userRole);
-            }
-        });
+		registerRoles.forEach(role -> {
+			if (role.equalsIgnoreCase("USER")) {
+				Role userRole = roleRepository
+						.findByRoleName(RoleName.ROLE_USER)
+						.orElseThrow(() -> new RuntimeException("Fail -> ROLE_USER not found in DB."));
+				userRoles.add(userRole);
+			}
+			if (role.equalsIgnoreCase("ADMIN")) {
+				Role userRole = roleRepository
+						.findByRoleName(RoleName.ROLE_ADMIN)
+						.orElseThrow(() -> new RuntimeException("Fail -> ROLE_ADMIN not found in DB."));
+				userRoles.add(userRole);
+			}
+		});
 
-        newUser.setRoles(userRoles);
-        userRepository.save(newUser);
+		newUser.setRoles(userRoles);
+		userRepository.save(newUser);
 
-        return new ResponseEntity<>(new ResponseMessage("Success! New user has been created!"), HttpStatus.OK);
-    }
+		return new ResponseEntity<>(new ResponseMessage("Success! New user has been created!"), HttpStatus.OK);
+	}
 
 
 }

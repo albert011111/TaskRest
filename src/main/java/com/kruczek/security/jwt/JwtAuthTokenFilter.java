@@ -41,11 +41,9 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 			LOGGER.debug("jwtToken: " + jwtToken);
 
 			if (jwtToken != null && tokenProvider.validateToken(jwtToken)) {
-				//wyciaga informacje o userze
 				String tokenUsername = tokenProvider.getUsernameFromJwtToken(jwtToken);
 				UserDetails userDetails = userDetailsService.loadUserByUsername(tokenUsername);
 
-				//tworzy JWT Token
 				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 						userDetails,
 						null,
@@ -53,7 +51,6 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 
 				authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
 
-				//przechowuje obiekt autentykacji w SecurityContext
 				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 			}
 

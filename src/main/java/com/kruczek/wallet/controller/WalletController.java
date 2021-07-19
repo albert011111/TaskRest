@@ -30,8 +30,6 @@ public class WalletController {
 		final String username = walletWrapperDTO.getUsername();
 		final Optional<User> userOpt = userRepository.findByUsername(username);
 		final User user = userOpt.orElseThrow(EntityNotFoundException::new);
-
-		System.out.println(user.getId());
 	}
 
 }

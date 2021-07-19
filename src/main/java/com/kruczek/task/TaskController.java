@@ -34,7 +34,6 @@ import static com.kruczek.task.TaskController.API;
 @RestController
 @RequestMapping(API)
 @PreAuthorize(value = "hasAnyRole('ADMIN', 'USER')")
-//@CrossOrigin(origins = "http://localhost:4201", maxAge = 3600)
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class TaskController {
 	static final String API = "/api";
@@ -81,11 +80,9 @@ public class TaskController {
 		}
 	}
 
-	//TODO dolaczyc mappera
 	@PutMapping(TASKS)
 	public Task addTask(@RequestBody TaskDTO taskDTO) {
 		try {
-			LOGGER.info("Request with taskDto: " + taskDTO);
 			final User userByUsername = userService.getUserByUsername(taskDTO.getUserName());
 			final Day day = dayService.getDay(taskDTO.getDayId()).orElse(null);
 

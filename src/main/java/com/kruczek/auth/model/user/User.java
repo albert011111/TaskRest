@@ -26,19 +26,16 @@ import com.kruczek.task.Task;
 @Entity
 @Table(name = "users", uniqueConstraints = {
 		@UniqueConstraint(columnNames = "username"),
-		@UniqueConstraint(columnNames = "email")//@UniqueConstrain --> ograniczenie unikatowosci
-		// w tabeli o danej nazwie
-		//jezeli bede chcial wprowadzic 2x taki sam mail bedzie exception
+		@UniqueConstraint(columnNames = "email")
 })
 
 public final class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//IDENTITY oznacza, ze id bedzie przydzielone na podstawie kolumny identity z bazy daych
 	private Long id;
 
-	@NotBlank // walidacja nie przepusci pustego znaku -> [" "]
+	@NotBlank
 	@Size(min = 3, max = 20)
 	private String name;
 
@@ -46,9 +43,7 @@ public final class User {
 	@Size(min = 3, max = 20)
 	private String username;
 
-	@NaturalId //domyslnie jest niemutowalne, NIE POWINNO sie tworzyc settera do takiego pola
-	//hibernate dostarcza funkcjonalnosc, ze mozna sie odwolac do encji (do DB) przez jego NaturalId
-	// --> @see byNaturalId
+	@NaturalId
 	@NotBlank
 	@Size(max = 50)
 	@Email
@@ -102,11 +97,6 @@ public final class User {
 	public String getEmail() {
 		return email;
 	}
-
-	//TODO zweryfikowac tresc adnotacji @NaturalId
-/*    public void setEmail(String email) {
-		this.email = email;
-    }*/
 
 	public String getPassword() {
 		return password;

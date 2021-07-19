@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kruczek.calendar.month.Month;
@@ -14,7 +13,6 @@ import com.kruczek.utils.NpeChecker;
 public class DayService {
 	private final DayRepository dayRepository;
 
-	@Autowired
 	public DayService(DayRepository dayRepository) {
 		this.dayRepository = dayRepository;
 	}

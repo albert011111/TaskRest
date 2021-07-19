@@ -20,40 +20,29 @@ import io.jsonwebtoken.UnsupportedJwtException;
 
 import static com.kruczek.utils.NpeChecker.getNpeDescription;
 
-@Component //typ stereotypu w Springu.
-// Adnotacja ta mówi, że obiekt tej klasy ma być zarządzany przez Springa jako BEAN
-// - automatycznie wyszukiwana przez kontener
-// UWAGA!! @Component == <bean> z konfiguracji XMLowej !!
-//wszystkie inne stereotypu dziedziczą po @Component
+@Component
 public class JwtProvider {
     private static final Logger LOGGER = Logger.getLogger(JwtProvider.class.getName());
 
-    @Value(value = "${kruczek.com.jwtSecret}")//adnotacja przypisuje domyślną wartość dla propertisa,
-    // w tym przypadku te wartości zapisane będą w application.properties
+	@Value(value = "${kruczek.com.jwtSecret}")
     private String jwtSecret;
 
     @Value(value = "${kruczek.com.jwtExp}")
     private long jwtExpiration;
 
-    /*Authentication - interfejs
-     Reprezentuje TOKEN dla requesta uwierzytelnienia
-     lub reprezentuje TOKEN dla uwierzytelnionego użytkownika po przetworzeniu requesta
-      przez metodę AuthenticationManager.authenticate(Authentication)
-     */
     public String createJwtToken(final Authentication authentication) {
         Objects.requireNonNull(authentication, getNpeDescription("authentication"));
         final UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        //Jwts --> fabryka dla tokenow JWT.
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername()) //sub(subject) - CLAIMS, nie trzeba ale dobrze to dodawac (Registred claims)
-                .setIssuedAt(new Date()) //okresla, kiedy token JWT zostal utworzony (timestamp - znak czasu)
-                .setExpiration(new Date(new Date().getTime() + jwtExpiration * 1000)) // nie trzeba tlumaczyc
-                .signWith(SignatureAlgorithm.HS512, jwtSecret) // "podpisuje" JWT
+				.setSubject(userPrincipal.getUsername())
+				.setIssuedAt(new Date())
+				.setExpiration(new Date(new Date().getTime() + jwtExpiration * 1000))
+				.signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    public boolean validateToken(final String tokenToValidate) {
+	boolean validateToken(final String tokenToValidate) {
         Objects.requireNonNull(tokenToValidate, getNpeDescription("tokenToValidate"));
 
         try {
@@ -71,7 +60,7 @@ public class JwtProvider {
         return false;
     }
 
-    public String getUsernameFromJwtToken(final String token) {
+	String getUsernameFromJwtToken(final String token) {
         Objects.requireNonNull(token, getNpeDescription("token"));
 
         return Jwts.parser()

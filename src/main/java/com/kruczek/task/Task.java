@@ -28,7 +28,6 @@ import com.kruczek.calendar.day.Day;
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
-//@JsonIgnoreProperties(value = {"createDate", "executeDate"}, allowGetters = true)
 public class Task {
 	@Id
 	@GeneratedValue

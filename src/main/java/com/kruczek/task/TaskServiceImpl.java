@@ -20,22 +20,22 @@ public class TaskServiceImpl {
 		this.taskRepository = Objects.requireNonNull(taskRepository, getNpeDescription("taskRepository"));
 	}
 
-	public Optional<Task> save(final Task task) {
+	Optional<Task> save(final Task task) {
 		Objects.requireNonNull(task, getNpeDescription("task"));
 		taskRepository.save(task);
 		return Optional.of(task);
 	}
 
-	public List<Task> getAll() {
+	List<Task> getAll() {
 		return taskRepository.findAll();
 	}
 
-	public List<Task> getAllByUser(User user) {
+	List<Task> getAllByUser(User user) {
 		Objects.requireNonNull(user, getNpeDescription("username"));
 		return taskRepository.findAllByUser(user);
 	}
 
-	public Optional<Task> getById(Long id) {
+	Optional<Task> getById(Long id) {
 		Objects.requireNonNull(id, getNpeDescription("id"));
 		return taskRepository.findById(id);
 	}

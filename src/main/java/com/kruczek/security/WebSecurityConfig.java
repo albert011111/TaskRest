@@ -24,10 +24,9 @@ import com.kruczek.security.jwt.JwtProvider;
 
 import static com.kruczek.utils.NpeChecker.getNpeDescription;
 
-@Configuration // oznacza klasę jako definicję beana dla contextu aplikacji
+@Configuration
 @EnableWebSecurity
-//wlacza security z poziomu wykonania metody --> w sensie, ze sprawdza czy dany uzytkownik moze wykonac metode
-@EnableGlobalMethodSecurity(prePostEnabled = true/*pozwala na adnotacje @PreAuthorize nad metodami*/)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserDetailsServiceImpl userService;
 	private final JwtAuthEntryPoint unauthorizedHandler;

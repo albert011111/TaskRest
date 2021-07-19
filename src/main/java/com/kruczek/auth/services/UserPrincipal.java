@@ -21,9 +21,6 @@ public class UserPrincipal implements UserDetails {
     @JsonIgnore
     private String password;
 
-    /*GrantedAuthority - klasa reprezentujaca, jakie użytkownik ma autoryzacje
-    @see getAuthority()
-    */
     private List<? extends GrantedAuthority> authorities;
 
     public UserPrincipal(long id,

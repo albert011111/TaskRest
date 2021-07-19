@@ -1,9 +1,9 @@
 package com.kruczek.calendar.day;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,33 +34,31 @@ public class DayController implements CalendarLogger {
 	private final MonthService monthService;
 	private final DayService dayService;
 
-	@Autowired
 	public DayController(MonthService monthService, DayService dayService) {
 		this.monthService = monthService;
 		this.dayService = dayService;
 	}
 
-	//TODO replace with getDaysByMonthId(monthId)
 	@Nullable
 	@GetMapping(DAYS + MONTHS + MONTH_NAME)
 	@Deprecated
 	public List<Day> getDaysByMonth(@PathVariable String monthName) {
-		LOGGER.info("Fetching days process started");
+		LOGGER.debug("Fetching days process started");
 		try {
 			final Month month = monthService.getMonthByName(monthName.toUpperCase());
 			return dayService.getDaysByMonth(month);
 		} catch (IllegalArgumentException ex) {
 			LOGGER.error("Illegal month name: {}", monthName);
-			return null;
+			return Collections.emptyList();
 		} finally {
-			LOGGER.info("Fetching days process finished");
+			LOGGER.debug("Fetching days process finished");
 		}
 	}
 
 	@Nullable
 	@GetMapping(DAYS + ID)
 	public Day getDayById(@PathVariable Long id) {
-		LOGGER.info("Fetching day with id={} started", id);
+		LOGGER.debug("Fetching day with id={} started", id);
 		try {
 			return dayService.getDay(id).orElseThrow(() -> new DayNotFoundException(id));
 		} catch (DayNotFoundException ex) {
